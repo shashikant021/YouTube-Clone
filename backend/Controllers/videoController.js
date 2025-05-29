@@ -15,8 +15,8 @@ export const uploadVideo = async (req, res) => {
       channelId,
       uploader: req.user.id,
       views: 0,
-      likes: 0,
-      dislikes: 0,
+      likes: req.user.id,
+      dislikes: req.user.id,
     });
 
     const savedVideo = await newVideo.save();
@@ -30,7 +30,7 @@ export const uploadVideo = async (req, res) => {
 
     res.status(201).json(savedVideo);
   } catch (err) {
-    console.error("Upload Video Error:", err);
+    // console.error("Upload Video Error:", err);
     res.status(500).json({ error: "Failed to upload video" });
   }
 };
@@ -85,15 +85,70 @@ export const updateVideo = async (req, res) => {
 export const deleteVideo = async (req, res) => {
   try {
     const video = await Video.findById(req.params.videoId);
-    if (!video) return res.status(404).json({ error: 'Video not found' });
+    if (!video) return res.status(404).json({ error: "Video not found" });
 
     if (video.uploader.toString() !== req.user.id) {
-      return res.status(403).json({ error: 'Unauthorized' });
+      return res.status(403).json({ error: "Unauthorized" });
     }
 
     await video.deleteOne();
-    res.status(200).json({ message: 'Video deleted successfully' });
+    res.status(200).json({ message: "Video deleted successfully" });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to delete video' });
+    res.status(500).json({ error: "Failed to delete video" });
+  }
+};
+
+// Like a video
+export const likeVideo = async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.videoId);
+    if (!video) return res.status(404).json({ error: "Video not found" });
+
+    const userId = req.user.id;
+
+    // Remove user from dislikes if present
+    video.dislikes = video.dislikes.filter((id) => id.toString() !== userId);
+
+    // Toggle like
+    if (video.likes.includes(userId)) {
+      video.likes = video.likes.filter((id) => id.toString() !== userId);
+    } else {
+      video.likes.push(userId);
+    }
+
+    await video.save();
+    res
+      .status(200)
+      .json({ message: "Like updated", likes: video.likes.length });
+  } catch (err) {
+    // console.error(' Like Error:', err);
+    res.status(500).json({ error: "Failed to update like" });
+  }
+};
+
+// Dislike a video
+export const dislikeVideo = async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.videoId);
+    if (!video) return res.status(404).json({ error: "Video not found" });
+
+    const userId = req.user.id;
+
+    // Remove user from likes if present
+    video.likes = video.likes.filter((id) => id.toString() !== userId);
+
+    // Toggle dislike
+    if (video.dislikes.includes(userId)) {
+      video.dislikes = video.dislikes.filter((id) => id.toString() !== userId);
+    } else {
+      video.dislikes.push(userId);
+    }
+
+    await video.save();
+    res
+      .status(200)
+      .json({ message: "Dislike updated", dislikes: video.dislikes.length });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update dislike" });
   }
 };
