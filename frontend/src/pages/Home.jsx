@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
 import VideoCard from "../components/VideoCard";
+import { useLocation } from "react-router-dom";
+import { useVideo } from "../context/VideoContext";
 
 function Home() {
   const categories = [
@@ -8,78 +11,67 @@ function Home() {
     "Music",
     "Gaming",
     "Education",
+    "Comedy",
+    "News",
+    "Sports",
   ];
 
-  const dummyVideos = [
-    {
-      _id: "1",
-      title: "Learn React in 30 Minutes",
-      thumbnailUrl:
-        "https://wallpapers.com/images/hd/programming-2000-x-2000-picture-tc971v23hrzictxm.jpg",
-      uploader: { username: "CodeMaster" },
-      views: 15000,
-    },
-    {
-      _id: "2",
-      title: "JavaScript Basics for Beginners",
-      thumbnailUrl:
-        "https://images.vectorhq.com/images/istock/previews/9585/95851417-young-programmer-coding-a-new-project.jpg",
-      uploader: { username: "DevGuru" },
-      views: 8000,
-    },
-    {
-      _id: "3",
-      title: "Learn React in 30 Minutes",
-      thumbnailUrl:
-        "https://wallpapers.com/images/hd/programming-2000-x-2000-picture-tc971v23hrzictxm.jpg",
-      uploader: { username: "CodeMaster" },
-      views: 15000,
-    },
-    {
-      _id: "4",
-      title: "JavaScript Basics for Beginners",
-      thumbnailUrl:
-        "https://images.vectorhq.com/images/istock/previews/9585/95851417-young-programmer-coding-a-new-project.jpg",
-      uploader: { username: "DevGuru" },
-      views: 8000,
-    },
-    {
-      _id: "5",
-      title: "Learn React in 30 Minutes",
-      thumbnailUrl:
-        "https://wallpapers.com/images/hd/programming-2000-x-2000-picture-tc971v23hrzictxm.jpg",
-      uploader: { username: "CodeMaster" },
-      views: 15000,
-    },
-    {
-      _id: "6",
-      title: "JavaScript Basics for Beginners",
-      thumbnailUrl:
-        "https://images.vectorhq.com/images/istock/previews/9585/95851417-young-programmer-coding-a-new-project.jpg",
-      uploader: { username: "DevGuru" },
-      views: 8000,
-    },
-  ];
+  const [activeCategory, setActiveCategory] = useState("All");
+  const { videos, filteredVideos, setFilteredVideos } = useVideo();
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const search = searchParams.get("search")?.toLowerCase() || "";
+
+  useEffect(() => {
+    let filtered = [...videos];
+
+    if (activeCategory !== "All") {
+      filtered = filtered.filter(
+        (video) =>
+          video.category?.toLowerCase() === activeCategory.toLowerCase()
+      );
+    }
+
+    if (search) {
+      filtered = filtered.filter((video) =>
+        video.title.toLowerCase().includes(search)
+      );
+    }
+
+    setFilteredVideos(filtered);
+  }, [videos, activeCategory, search]);
 
   return (
     <div className="flex">
       <main className="flex-1 p-4 ml-0 md:ml-48">
+        {/* Category Filters */}
         <div className="flex justify-evenly gap-2 overflow-x-auto mb-4">
           {categories.map((cat) => (
             <button
               key={cat}
-              className="px-4 py-1 text-sm rounded-full bg-gray-200 hover:bg-gray-400 hover:font-bold"
+              onClick={() => setActiveCategory(cat)}
+              className={`px-4 py-1 text-sm rounded-full ${
+                activeCategory === cat
+                  ? "bg-zinc-900 text-white font-semibold"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
             >
               {cat}
             </button>
           ))}
         </div>
 
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {dummyVideos.map((video) => (
-            <VideoCard key={video._id} video={video} />
-          ))}
-        </div>
+        {/* Video Grid */}
+        {filteredVideos.length === 0 ? (
+          <p className="text-center text-gray-500">No videos found.</p>
+        ) : (
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {filteredVideos.map((video) => (
+              <VideoCard key={video._id} video={video} />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

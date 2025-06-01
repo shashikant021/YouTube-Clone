@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import { useState } from "react";
 import Sidebar from "./components/Sidebar";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -20,8 +21,23 @@ function App() {
         <div className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/video/:id" element={<VideoPlayer />} />
-            <Route path="/channel/:channelId" element={<Channel />} />
+            <Route
+              path="/video/:id"
+              element={
+                <ProtectedRoute>
+                  {" "}
+                  <VideoPlayer />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/channel/:channelId"
+              element={
+                <ProtectedRoute>
+                  <Channel />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<NotFound />} />

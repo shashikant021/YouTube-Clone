@@ -4,8 +4,8 @@ function VideoCard({ video }) {
   return (
     <Link to={`/video/${video.id}`} className="block my-2">
       <img
-        src="video.thumbnailUrl"
-        alt="video.title"
+        src={video.thumbnailUrl}
+        alt={video.title}
         className="w-full rounded-md h-40 object-cover"
       />
       <div className="mt-2">
