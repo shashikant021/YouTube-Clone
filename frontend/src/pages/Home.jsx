@@ -11,9 +11,13 @@ function Home() {
     "Music",
     "Gaming",
     "Education",
-    "Comedy",
+    "Entertainment",
     "News",
     "Sports",
+    "Technology",
+    "Travel",
+    "Food",
+    "Other",
   ];
 
   const [activeCategory, setActiveCategory] = useState("All");

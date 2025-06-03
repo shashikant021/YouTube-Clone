@@ -13,6 +13,7 @@ export const uploadVideo = async (req, res) => {
       description,
       thumbnailUrl,
       channelId,
+      category: req.body.category || "Other", // Default to "Other" if not provided
       uploader: req.user.id,
       views: 0,
       likes: req.user.id,
