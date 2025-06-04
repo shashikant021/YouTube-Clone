@@ -30,6 +30,19 @@ export const getAllChannels = async (req, res) => {
   }
 };
 
+// Get channel by user ID
+export const getChannelByUser = async (req, res) => {
+  try {
+    const channel = await Channel.findOne({ owner: req.params.userId })
+      .populate('videos')
+      .populate('owner', 'username');
+    if (!channel) return res.status(404).json({ error: 'Channel not found' });
+    res.status(200).json(channel);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch channel' });
+  }
+};
+
 // Get a specific channel by ID
 export const getChannelById = async (req, res) => {
   try {
