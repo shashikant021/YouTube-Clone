@@ -9,6 +9,8 @@ import NotFound from "./pages/NotFound";
 import { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import UploadVideo from "./pages/UploadVideo";
+import EditVideo from "./pages/EditVideo";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -40,6 +42,8 @@ function App() {
             />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/upload" element={<UploadVideo />} />
+            <Route path="/edit-video/:videoId" element={<EditVideo />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

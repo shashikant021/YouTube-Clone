@@ -9,8 +9,8 @@ function VideoCard({ video }) {
         className="w-full rounded-md h-40 object-cover"
       />
       <div className="mt-2">
-        <h3 className="font-semibold">{video.title}</h3>
-        <p>{video.uploader.username}</p>
+        <h3 className="font-semibol truncate">{video.title}</h3>
+        <p>{video.uploader?.username || "Unknown"}</p>
         <p>{video.views}</p>
       </div>
     </Link>

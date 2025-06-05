@@ -12,12 +12,13 @@ export const uploadVideo = async (req, res) => {
       title,
       description,
       thumbnailUrl,
+      videoUrl: req.body.videoUrl,
       channelId,
       category: req.body.category || "Other", // Default to "Other" if not provided
       uploader: req.user.id,
       views: 0,
-      likes: req.user.id,
-      dislikes: req.user.id,
+      likes: [],
+      dislikes: [],
     });
 
     const savedVideo = await newVideo.save();
@@ -31,7 +32,7 @@ export const uploadVideo = async (req, res) => {
 
     res.status(201).json(savedVideo);
   } catch (err) {
-    // console.error("Upload Video Error:", err);
+    console.error("Upload Video Error:", err);
     res.status(500).json({ error: "Failed to upload video" });
   }
 };
@@ -69,11 +70,12 @@ export const updateVideo = async (req, res) => {
       return res.status(403).json({ error: "Unauthorized" });
     }
 
-    const { title, description, thumbnailUrl } = req.body;
+    const { title, description, thumbnailUrl, category } = req.body;
 
     if (title) video.title = title;
     if (description) video.description = description;
     if (thumbnailUrl) video.thumbnailUrl = thumbnailUrl;
+    if (category) video.category = category;
 
     await video.save();
     res.status(200).json(video);

@@ -44,6 +44,7 @@ const ChannelPage = () => {
       const res = await axios.post("/channels", formData, {
         headers: { Authorization: `JWT ${token}` },
       });
+      localStorage.setItem("channelId", res.data._id);
       setChannel(res.data);
     } catch (err) {
       console.error("Create channel failed", err.response?.data || err.message);
@@ -127,7 +128,15 @@ const ChannelPage = () => {
               {channel.owner?.username || "Unknown User"}
             </span>
           </p>
-          <h3 className="text-2xl font-semibold mb-3">Your Videos</h3>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl font-semibold mb-3">Your Videos</h3>
+            <button
+              onClick={() => navigate("/upload")}
+              className="mb-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-800"
+            >
+              Upload New Video
+            </button>
+          </div>
           {channel.videos.length === 0 ? (
             <p className="text-gray-500">No videos uploaded yet.</p>
           ) : (
@@ -142,11 +151,11 @@ const ChannelPage = () => {
                     alt={video.title}
                     className="w-full h-40 object-cover rounded"
                   />
-                  <h4 className="font-bold mt-2">{video.title}</h4>
+                  <h4 className="font-bold mt-2 truncate">{video.title}</h4>
                   <p className="text-sm text-gray-500">
                     {video.description?.slice(0, 60)}...
                   </p>
-                  <div className="flex justify-between mt-3">
+                  <div className="flex justify-between mt-3 gap-4 flex-wrap">
                     <button
                       onClick={() => navigate(`/edit-video/${video._id}`)}
                       className="text-blue-600 hover:underline"
