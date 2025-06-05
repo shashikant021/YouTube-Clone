@@ -13,15 +13,28 @@ const AuthProvider = ({ children }) => {
         .get("/auth/me", {
           headers: { Authorization: `JWT ${token}` },
         })
-        .then((res) => setUser(res.data))
+        .then(async (res) => {
+          setUser(res.data);
+
+          // Fetch the user's channel after setting user
+          try {
+            const channelRes = await axios.get(
+              `/channels/user/${res.data._id}`,
+              {
+                headers: { Authorization: `JWT ${token}` },
+              }
+            );
+            localStorage.setItem("channelId", channelRes.data._id);
+          } catch (err) {
+            console.log("No channel found for this user.");
+            localStorage.removeItem("channelId");
+          }
+        })
         .catch(() => {
-          // setUser(null);
           setToken(null);
           localStorage.removeItem("token");
         });
     }
-    // console.log("Token loaded:", token);
-    // console.log("User updated:", user);
   }, [token]);
 
   const login = (newtoken) => {
@@ -33,6 +46,7 @@ const AuthProvider = ({ children }) => {
     setToken(null);
     setUser(null);
     localStorage.removeItem("token");
+    localStorage.removeItem("channelId");
   };
 
   return (
