@@ -2,7 +2,7 @@ import axios from "../api/axios";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
-import { FaEye } from "react-icons/fa";
+import { FaBell, FaEye } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 
 function VideoPlayer() {
@@ -12,6 +12,8 @@ function VideoPlayer() {
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
   const [error, setError] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editingText, setEditingText] = useState("");
 
   const fetchVideoData = async () => {
     try {
@@ -83,10 +85,38 @@ function VideoPlayer() {
     }
   };
 
+  const handleEditComment = async (commentId) => {
+    try {
+      await axios.put(
+        `/comments/${commentId}`,
+        { text: editingText },
+        {
+          headers: { Authorization: `JWT ${localStorage.getItem("token")}` },
+        }
+      );
+      setEditingCommentId(null);
+      setEditingText("");
+      fetchComments();
+    } catch (err) {
+      console.error("Edit failed");
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axios.delete(`/comments/${commentId}`, {
+        headers: { Authorization: `JWT ${localStorage.getItem("token")}` },
+      });
+      fetchComments();
+    } catch (err) {
+      console.error("Delete failed");
+    }
+  };
+
   const getEmbedUrl = (url) => {
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
-  return match ? `https://www.youtube.com/embed/${match[1]}` : "";
-};
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+    return match ? `https://www.youtube.com/embed/${match[1]}` : "";
+  };
 
   if (error) return <p className="text-center mt-10">{error}</p>;
   if (!video) return <p className="text-center mt-10">Loading...</p>;
@@ -125,6 +155,17 @@ function VideoPlayer() {
       </div>
 
       <p className="text-gray-800 my-4">{video.description}</p>
+      <div className="flex gap-5">
+        <p className="font-medium my-1">
+          Uploaded By:{" "}
+          <span className="text-gray-800 my-1">
+            {video.channelId?.channelName}
+          </span>
+        </p>
+        <button className=" flex items-center gap-2 font-bold bg-zinc-700 py-1 px-4 rounded-2xl hover:bg-zinc-900 text-white">
+          Subscribe <FaBell className="text-red-500 hover:text-red-700" />
+        </button>
+      </div>
 
       <div className="mt-6">
         <h3 className="font-semibold mb-2">Comments</h3>
@@ -152,8 +193,54 @@ function VideoPlayer() {
         <div className="flex flex-col gap-3">
           {comments.map((c) => (
             <div key={c._id} className="border-b pb-2">
-              <p className="font-medium text-sm">{c.userId.username}</p>
-              <p className="text-gray-700">{c.text}</p>
+              <p className="font-medium text-sm">{c.userId?.username}</p>
+
+              {editingCommentId === c._id ? (
+                <div className="flex gap-2 mt-1">
+                  <input
+                    type="text"
+                    value={editingText}
+                    onChange={(e) => setEditingText(e.target.value)}
+                    className="flex-1 border rounded px-2 py-1"
+                  />
+                  <button
+                    onClick={() => handleEditComment(c._id)}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setEditingCommentId(null)}
+                    className="text-gray-500 hover:underline"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <p className="text-gray-700">{c.text}</p>
+              )}
+
+              {user &&
+                c.userId?._id === user._id &&
+                editingCommentId !== c._id && (
+                  <div className="flex gap-4 mt-1 text-sm">
+                    <button
+                      onClick={() => {
+                        setEditingCommentId(c._id);
+                        setEditingText(c.text);
+                      }}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteComment(c._id)}
+                      className="text-red-600 hover:underline"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
             </div>
           ))}
         </div>

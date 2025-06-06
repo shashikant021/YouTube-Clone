@@ -10,7 +10,10 @@ function VideoCard({ video }) {
       />
       <div className="mt-2">
         <h3 className="font-semibol truncate">{video.title}</h3>
-        <p>{video.uploader?.username || "Unknown"}</p>
+
+        <p className="text-sm text-gray-600">
+          {video.channelId?.channelName || "Unknown Channel"}
+        </p>
         <p>{video.views}</p>
       </div>
     </Link>

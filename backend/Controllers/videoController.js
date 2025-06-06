@@ -40,7 +40,9 @@ export const uploadVideo = async (req, res) => {
 // Get all videos
 export const getAllVideos = async (req, res) => {
   try {
-    const videos = await Video.find().populate("uploader", "username");
+    const videos = await Video.find()
+      .populate("uploader", "username")
+      .populate("channelId", "channelName");
     res.status(200).json(videos);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch videos" });

@@ -121,13 +121,20 @@ const ChannelPage = () => {
           <h2 className="text-3xl font-bold">{channel.channelName}</h2>
           <p className="text-gray-600 mb-4">{channel.description}</p>
           {/* //Display channel owner */}
-          <p className="text-sm mb-6 font-bold">
-            Owned by:{" "}
-            <span className="font-medium">
+          <div className="text-sm mb-6 font-bold flex gap-5">
+            <p>
               {" "}
-              {channel.owner?.username || "Unknown User"}
-            </span>
-          </p>
+              Owned by:{" "}
+              <span className="font-medium">
+                {" "}
+                {channel.owner?.username || "Unknown User"}
+              </span>
+            </p>
+
+            <button className="font-bold bg-zinc-700 py-1 px-4 rounded-2xl hover:bg-zinc-900 text-white">
+              Subscribe
+            </button>
+          </div>
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-2xl font-semibold mb-3">Your Videos</h3>
             <button
