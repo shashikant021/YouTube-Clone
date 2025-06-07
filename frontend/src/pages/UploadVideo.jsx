@@ -92,15 +92,13 @@ function UploadVideo() {
           className="w-full border p-2 rounded bg-white"
         >
           <option value="">Select a Category</option>
-          <option value="Programming">Programming</option>
           <option value="Movies">Movies</option>
           <option value="Music">Music</option>
+          <option value="TV Show">TV Show</option>
           <option value="Gaming">Gaming</option>
           <option value="Education">Education</option>
-          <option value="Entertainment">Entertainment</option>
           <option value="News">News</option>
           <option value="Sports">Sports</option>
-          <option value="Technology">Technology</option>
           <option value="Travel">Travel</option>
           <option value="Food">Food</option>
           <option value="Other">Other</option>

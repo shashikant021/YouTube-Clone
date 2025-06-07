@@ -3,15 +3,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 
 const categories = [
-  "Programming",
   "Movies",
   "Music",
+  "TV Show",
   "Gaming",
   "Education",
-  "Entertainment",
   "News",
   "Sports",
-  "Technology",
   "Travel",
   "Food",
   "Other",

@@ -9,10 +9,10 @@ import { useVideo } from "../context/VideoContext";
 
 function Header({ toggleSidebar }) {
   const { user, logout } = useContext(AuthContext);
-    const { search, setSearch, handleSearch } = useVideo();
+  const { search, setSearch, handleSearch } = useVideo();
 
 
-
+  
   return (
     <header className="flex items-center justify-between px-6 py-3 bg-white shadow-md sticky top-0 z-100">
       <div className="flex item-center gap-4">
@@ -56,8 +56,8 @@ function Header({ toggleSidebar }) {
           </Link>
         ) : (
           <>
-            <span className="text-sm font-medium text-gray-700">
-              {user.username}
+            <span className="flex items-center gap-1 text-sm font-medium text-gray-700 bg-zinc-300 py-1 px-4 rounded">
+              <MdAccountCircle className="text-2xl" /> {user.username}
             </span>
             <button
               onClick={logout}
