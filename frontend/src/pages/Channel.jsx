@@ -121,7 +121,7 @@ const ChannelPage = () => {
           <h2 className="text-3xl font-bold">{channel.channelName}</h2>
           <p className="text-gray-600 mb-4">{channel.description}</p>
           {/* //Display channel owner */}
-          <div className="text-sm mb-6 font-bold flex gap-5">
+          <div className="text-sm mb-6 font-bold flex items-center gap-5">
             <p>
               {" "}
               Owned by:{" "}

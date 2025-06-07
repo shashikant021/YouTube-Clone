@@ -46,9 +46,9 @@ function Home() {
 
   return (
     <div className="flex">
-      <main className="flex-1 p-4 ml-0 md:ml-48">
+      <main className="flex-1 p-4 ml-0">
         {/* Category Filters */}
-        <div className="flex justify-center flex-wrap gap-2 overflow-x-auto mb-4">
+        <div className="flex justify-center flex-wrap gap-2 mb-4">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -68,7 +68,7 @@ function Home() {
         {filteredVideos.length === 0 ? (
           <p className="text-center text-gray-500">No videos found.</p>
         ) : (
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid m-6 sm:m-0 gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
             {filteredVideos.map((video) => (
               <VideoCard key={video._id} video={video} />
             ))}
