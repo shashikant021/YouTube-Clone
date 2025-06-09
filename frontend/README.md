@@ -25,7 +25,6 @@ Node.js
 Express.js
 MongoDB (Mongoose)
 JWT for auth
-Multer/Cloudinary (optional for video upload)
 
 # Installation & Setup
 1. Clone the Repository
