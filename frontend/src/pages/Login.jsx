@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 
 function Login() {
@@ -62,9 +62,9 @@ function Login() {
       </form>
       <p className="text-center text-gray-600">
         Don't have an account?{" "}
-        <a href="/register" className="text-blue-500 hover:underline">
+        <Link to="/register" className="text-blue-500 hover:underline">
           Register
-        </a>
+        </Link>
       </p>
     </div>
   );

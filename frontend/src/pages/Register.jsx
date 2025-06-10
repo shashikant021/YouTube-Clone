@@ -1,6 +1,6 @@
 import axios from "../api/axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -72,9 +72,9 @@ function Register() {
       </form>
       <p className="text-center text-gray-600">
         Already have an account?{" "}
-        <a href="/login" className="text-blue-500 hover:underline">
+        <Link to="/login" className="text-blue-500 hover:underline">
           Login
-        </a>
+        </Link>
       </p>
     </div>
   );
